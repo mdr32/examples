@@ -1,0 +1,35 @@
+{
+    // Используйте IntelliSense, чтобы узнать о возможных атрибутах.
+    // Наведите указатель мыши, чтобы просмотреть описания существующих атрибутов.
+    // Для получения дополнительной информации посетите: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug (MDR32F9Q2I)",
+            "cwd": "${workspaceRoot}",
+            "executable": "${workspaceRoot}/main.elf",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "openocd",
+            "serverpath": "/usr/local/bin/openocd",
+            "device": "MDR32F9Qx",
+            "svdFile": "${workspaceRoot}/dep/mcu/MDR1986BE92.svd",
+            "configFiles": [
+                "${workspaceRoot}/dep/probe/jlink4swd.cfg",
+                "${workspaceRoot}/dep/probe/rtt.cfg"
+            ],
+            "preLaunchTask": "build_4debug",
+            "rttConfig": {
+                "enabled": true,
+                "address": "auto",
+                "clearSearch": false,
+                "decoders": [
+                    {
+                        "port": 0,
+                        "type": "console"
+                    }
+                ]
+            }  
+        },
+    ]
+}

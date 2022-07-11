@@ -1,0 +1,26 @@
+{
+    "configurations": [
+        {
+            "name": "vscode_mdr32_c_cpp_properties",
+            "compilerPath": "/usr/bin/arm-none-eabi-gcc",
+            "includePath": [
+                "${workspaceRoot}/lib/Config/",
+                "${workspaceRoot}/lib/CMSIS/MDR32FxQI/CoreSupport/CM3/",
+                "${workspaceRoot}/lib/CMSIS/MDR32FxQI/DeviceSupport/MDR32F9Q2I/inc/",
+                "${workspaceRoot}/lib/CMSIS/MDR32FxQI/DeviceSupport/MDR32F9Q2I/startup",
+                "${workspaceRoot}/lib/SPL/MDR32FxQI/inc/IRQ_Handler_Template/",
+                "${workspaceRoot}/lib/SPL/MDR32FxQI/inc/**",
+                "${workspaceRoot}/lib/Debug/",
+                "${workspaceRoot}/lib/Debug/**",
+                "${workspaceRoot}/inc/**"
+            ],
+            "defines": [
+                "USE_MDR32F9Q2I"
+            ],
+            "cStandard": "c99",
+            "intelliSenseMode": "gcc-arm",
+            "configurationProvider": "ms-vscode.makefile-tools"
+        }
+    ],
+    "version": 4
+}
