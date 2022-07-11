@@ -12,6 +12,7 @@
                 "${workspaceRoot}/lib/SPL/MDR32FxQI/inc/**",
                 "${workspaceRoot}/lib/Debug/",
                 "${workspaceRoot}/lib/Debug/**",
+                "${workspaceRoot}/lib/LOCM3/inc/**",
                 "${workspaceRoot}/inc/**"
             ],
             "defines": [
