@@ -39,9 +39,8 @@ void gpio_port_write(uint32_t gpioport, uint16_t data)
 
 void gpio_mode_setup(uint32_t gpioport, GPIO_MODE_TypeDef mode, uint8_t pull_up_down, uint16_t gpios)
 {
-	/** @note При указании GPIO_MODE_AF осуществляется очистка регистров */
 	uint16_t i;
-	uint32_t pupd;
+	uint32_t pupd, oafr;
 
 	if (mode == GPIO_MODE_ANALOG) {
 		GPIO_ANALOG(gpioport) &= ~(gpios | JTAG_PINS(gpioport));
@@ -56,6 +55,7 @@ void gpio_mode_setup(uint32_t gpioport, GPIO_MODE_TypeDef mode, uint8_t pull_up_
 	}
 
 	pupd = GPIO_PULL(gpioport);
+	oafr = GPIO_FUNC(gpioport);
 
 	for (i = 0; i < 16; i++) {
 		if (!((1 << i) & gpios)) {
@@ -63,8 +63,15 @@ void gpio_mode_setup(uint32_t gpioport, GPIO_MODE_TypeDef mode, uint8_t pull_up_
 		}
 		pupd &= ~GPIO_PUPD_MASK(i);
 		pupd |= GPIO_PUPD(i, pull_up_down);
+		/** @note у MCU только один управляющий регистр альтернативных функций,
+		 * 		  лучше сбросить, исключив по умолчанию приоритет функции над портом */
+		if(mode != GPIO_MODE_AF) {
+			oafr &= ~GPIO_AF_NUM_MASK(i);
+			oafr |= GPIO_AF_NUM(i, GPIO_FUN_PORT);
+		}
 	}
 	GPIO_PULL(gpioport) = pupd & (~JTAG_PINS(gpioport));
+	GPIO_FUNC(gpioport) = oafr & (~JTAG_PINS(gpioport));
 }
 
 void gpio_set_output_options(uint32_t gpioport, uint8_t otype, uint8_t speed, uint16_t gpios)
