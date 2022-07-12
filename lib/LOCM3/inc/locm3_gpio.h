@@ -163,8 +163,8 @@ typedef enum
 #define GPIO_PUPD_MASK(n)       (0x00010001 << (n));
 
 #define GPIO_PUPD_NONE			0x0
-#define GPIO_PUPD_PULLUP		0x1
-#define GPIO_PUPD_PULLDOWN		0x2
+#define GPIO_PUPD_PULLDOWN		0x1
+#define GPIO_PUPD_PULLUP		0x2
 
 
 #if defined (USE_JTAG_A)
