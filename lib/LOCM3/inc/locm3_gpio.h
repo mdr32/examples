@@ -106,7 +106,66 @@
 #define GPIO15				(1 << 15)
 #define GPIO_ALL			0xffff
 
-//////////////////////////////////////////////////
+/**
+ * @brief GPIO_MODE: абстрактный тип настройки, не имеющая собственного регистра.
+ *        Позволяет настраивать порт в зависимости от бизнес-цели.
+ */
+#define GPIO_MODE(n, mode)		((mode) << (2 * (n))) // Это не нужно, так как есть FUNC, сам список можно вынести в тип
+#define GPIO_MODE_MASK(n)		(0x3 << (2 * (n)))
+
+typedef enum
+{
+    GPIO_MODE_INPUT		= 0x0,
+    GPIO_MODE_OUTPUT	= 0x1,
+    GPIO_MODE_AF		= 0x2,
+    GPIO_MODE_ANALOG    = 0x3
+} GPIO_MODE_TypeDef;
+
+
+#define GPIO_AF_NUM(n, af)      ((af) << (2 * (n))) // Это не нужно, так как есть FUNC, сам список можно вынести в тип
+#define GPIO_AF_NUM_MASK(n)		(0x3 << (2 * (n)))
+
+typedef enum
+{
+    GPIO_FUN_PORT       = 0x0,
+    GPIO_FUN_MAIN       = 0x1,
+    GPIO_FUN_ALT        = 0x2,
+    GPIO_FUN_OVERRID    = 0x3,
+    /** @note Cинонимы по аналогии, приведены для наглядности.
+     *       Использование - не желательно! */
+    GPIO_AF0            = 0x0,
+    GPIO_AF1            = 0x1,
+    GPIO_AF2            = 0x2,
+    GPIO_AF3            = 0x3
+} GPIO_AFNUM_TypeDef;
+
+// #define GPIOA_OFUNC()
+/**@}*/
+
+/* --- GPIOx_PD values ------------------------------------------------- */
+#define GPIO_OTYPE_PP			0x0 /** Push Pull */
+#define GPIO_OTYPE_OD			0x1 /** Open Drain */
+
+/* --- GPIOx_PWR values ------------------------------------------------ */
+#define GPIO_OSPEED(n, speed)   ((speed) << (2 * (n)))
+#define GPIO_OSPEED_MASK(n)     (0x3 << (2 * (n)))
+
+#define GPIO_OSPEED_OFF      0x0
+#define GPIO_OSPEED_SLOW     0x1
+#define GPIO_OSPEED_FAST     0x2
+#define GPIO_OSPEED_MAXFAST  0x3
+
+/**@}*/
+
+/* --- GPIOx_PULL values -------------------------------------------------- */
+/** Одновременная установка в младшем и старшем разраяде */
+#define GPIO_PUPD(n, pupd)      (((1 & (pupd >> 1)) << (n + 16)) | ((1 & pupd) <<  n));
+#define GPIO_PUPD_MASK(n)       (0x00010001 << (n));
+
+#define GPIO_PUPD_NONE			0x0
+#define GPIO_PUPD_PULLUP		0x1
+#define GPIO_PUPD_PULLDOWN		0x2
+
 
 #if defined (USE_JTAG_A)
     #define PORT_JTAG                   GPIOB   // Порт, содержащий интерфейс JTAG
@@ -129,6 +188,11 @@ uint16_t gpio_get(uint32_t gpioport, uint16_t gpios);
 void gpio_toggle(uint32_t gpioport, uint16_t gpios);
 uint16_t gpio_port_read(uint32_t gpioport);
 void gpio_port_write(uint32_t gpioport, uint16_t data);
+
+
+void gpio_mode_setup(uint32_t gpioport, GPIO_MODE_TypeDef mode, uint8_t pull_up_down, uint16_t gpios);
+void gpio_set_output_options(uint32_t gpioport, uint8_t otype, uint8_t speed, uint16_t gpios);
+void gpio_set_af(uint32_t gpioport, GPIO_AFNUM_TypeDef alt_func_num, uint16_t gpios);
 
 #ifdef __cplusplus
 }

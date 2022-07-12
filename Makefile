@@ -23,7 +23,6 @@ SRCFILES	=	$(TOP_DIR)src/main.c \
 				$(TOP_DIR)src/delay.c \
 				$(TOP_DIR)dep/gcc/startup_MDR32F9Qx.S \
 				$(TOP_DIR)lib/CMSIS/MDR32FxQI/DeviceSupport/MDR32F9Q2I/startup/system_MDR32F9Q2I.c \
-				$(TOP_DIR)lib/SPL/MDR32FxQI/src/MDR32FxQI_port.c \
 				$(TOP_DIR)lib/SPL/MDR32FxQI/src/MDR32FxQI_rst_clk.c \
 				$(TOP_DIR)lib/Debug/rtt/SEGGER_RTT.c \
 				$(TOP_DIR)lib/Debug/rtt/SEGGER_RTT_printf.c \
