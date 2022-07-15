@@ -1,26 +1,30 @@
 #include "main.h"
 
 #include "MDR32FxQI_rst_clk.h"
-#include "locm3_gpio.h"
+#include "DHT.h"
 
-#define LED_PORT GPIOC
-#define LED_PIN GPIO2
-#define MSLEEP 300 // ms
+#define MSLEEP 500 // ms
 
 static void clk_CoreConfig(void);
+
+DHT_t Sensor;
+
+void Timer1_IRQHandler(void)
+{
+	DHT_CaptureIRQCallback(&Sensor);
+}
+
+
 int main(void)
 {
     clk_CoreConfig();
     delay_setup();
-    
-    RST_CLK_PCLKcmd(RST_CLK_PCLK_PORTC, ENABLE);//  Включаем тактирование порта C
-
-    gpio_mode_setup(LED_PORT, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, LED_PIN);
-    gpio_set_output_options(LED_PORT, GPIO_OTYPE_PP, GPIO_OSPEED_SLOW, LED_PIN);
     while (1)
     {
-		gpio_toggle(LED_PORT, LED_PIN);
-        delay_ms(MSLEEP);
+        DHT_data_read(&Sensor);
+        delay_ms(300);
+		DHT_data_calc(&Sensor);
+		delay_ms(100);
     }
     return 0;
 }
