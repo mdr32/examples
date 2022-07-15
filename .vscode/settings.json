@@ -5,5 +5,6 @@
 
     "cortex-debug.armToolchainPath": "/usr/bin",
     "cortex-debug.gdbPath": "/usr/bin/gdb-multiarch",
-    "cortex-debug.enableTelemetry": false
+    "cortex-debug.enableTelemetry": false,
+    "cortex-debug.variableUseNaturalFormat": false
 }
