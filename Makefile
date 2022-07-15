@@ -21,6 +21,7 @@ INC 		=	-I$(TOP_DIR)lib/Config \
 
 SRCFILES	=	$(TOP_DIR)src/main.c \
 				$(TOP_DIR)src/delay.c \
+				$(TOP_DIR)src/DHT.c \
 				$(TOP_DIR)dep/gcc/startup_MDR32F9Qx.S \
 				$(TOP_DIR)lib/CMSIS/MDR32FxQI/DeviceSupport/MDR32F9Q2I/startup/system_MDR32F9Q2I.c \
 				$(TOP_DIR)lib/SPL/MDR32FxQI/src/MDR32FxQI_rst_clk.c \
@@ -28,7 +29,8 @@ SRCFILES	=	$(TOP_DIR)src/main.c \
 				$(TOP_DIR)lib/Debug/rtt/SEGGER_RTT_printf.c \
 				$(TOP_DIR)lib/LOCM3/src/locm3_rcc.c \
 				$(TOP_DIR)lib/LOCM3/src/locm3_systick.c \
-				$(TOP_DIR)lib/LOCM3/src/locm3_gpio.c
+				$(TOP_DIR)lib/LOCM3/src/locm3_gpio.c \
+				$(TOP_DIR)lib/LOCM3/src/locm3_timer.c
 
 PREFIX		?= arm-none-eabi
 DEFS		+= -DUSE_MDR32F9Q2I -D__STARTUP_CLEAR_BSS -D__START=main
