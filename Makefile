@@ -5,6 +5,12 @@
 TOP_DIR 	:= $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 HRD_PROBE		= ./dep/probe/jlink4swd.cfg	# JLlink hardware probe
 
+######
+# Компилируемый	проект
+EXAMPLE		= DHT_Sensor
+
+include $(TOP_DIR)examples/${EXAMPLE}/Makefile
+
 BINARY		=	main
 LDSCRIPT	?= $(TOP_DIR)/dep/gcc/MDR32F9Qx.ld
 
@@ -19,9 +25,9 @@ INC 		=	-I$(TOP_DIR)lib/Config \
 				-I$(TOP_DIR)lib/LOCM3/inc \
 				-I$(TOP_DIR)inc
 
-SRCFILES	=	$(TOP_DIR)src/main.c \
+SRCFILES	=	$(foreach n, $(EXAMPLES_SRCFILES), $(TOP_DIR)examples/$(EXAMPLE)/$(n) ) \
+				$(TOP_DIR)examples/${EXAMPLE}/main.c \
 				$(TOP_DIR)src/delay.c \
-				$(TOP_DIR)src/DHT.c \
 				$(TOP_DIR)dep/gcc/startup_MDR32F9Qx.S \
 				$(TOP_DIR)lib/CMSIS/MDR32FxQI/DeviceSupport/MDR32F9Q2I/startup/system_MDR32F9Q2I.c \
 				$(TOP_DIR)lib/SPL/MDR32FxQI/src/MDR32FxQI_rst_clk.c \
