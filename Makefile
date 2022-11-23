@@ -7,7 +7,7 @@ HRD_PROBE		= ./dep/probe/jlink4swd.cfg	# JLlink hardware probe
 
 ######
 # Компилируемый	проект
-EXAMPLE		= Blinky
+EXAMPLE		= DHT_Sensor
 
 include $(TOP_DIR)examples/${EXAMPLE}/Makefile.inc
 
@@ -23,8 +23,8 @@ INC 		=	-I$(TOP_DIR)lib/Config \
 				-I$(TOP_DIR)lib/SPL/MDR32FxQI/inc/IRQ_Handler_Template \
 				-I$(TOP_DIR)lib/Debug \
 				-I$(TOP_DIR)lib/LOCM3/inc \
-				-I$(TOP_DIR)inc \
 				-I$(TOP_DIR)examples \
+				-I$(TOP_DIR)inc
 
 SRCFILES	=	$(TOP_DIR)examples/${EXAMPLE}/main.c \
 				$(TOP_DIR)dep/gcc/startup_MDR32F9Qx.S \

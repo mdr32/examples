@@ -6,12 +6,6 @@ extern "C"
 {
 #endif
 
-#include "MDR32FxQI_rst_clk.h"
-#include "locm3_gpio.h"
-#include "locm3_timer.h"
-
-#include "delay.h"
-
 typedef enum
 {
     DHT_State_IDLE = 0,

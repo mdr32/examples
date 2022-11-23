@@ -1,6 +1,8 @@
 #include "main.h"
 
 #include "MDR32FxQI_rst_clk.h"
+#include "common/delay.h"
+
 #include "DHT.h"
 
 #define MSLEEP 500 // ms

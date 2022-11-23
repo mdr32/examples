@@ -1,3 +1,10 @@
+#include "MDR32FxQI_rst_clk.h"
+#include "locm3_rcc.h"
+#include "locm3_gpio.h"
+#include "locm3_timer.h"
+
+#include "common/delay.h"
+
 #include "DHT.h"
 
 #define DHT_INTERVAL_TIMER_US_LIMIT 200 // µs
