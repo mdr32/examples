@@ -7,7 +7,7 @@ HRD_PROBE		= ./dep/probe/jlink4swd.cfg	# JLlink hardware probe
 
 ######
 # Компилируемый	проект
-EXAMPLE		= DHT_Sensor
+EXAMPLE		= Blinky
 
 include $(TOP_DIR)examples/${EXAMPLE}/Makefile.inc
 
