@@ -7,9 +7,9 @@ HRD_PROBE		= ./dep/probe/jlink4swd.cfg	# JLlink hardware probe
 
 ######
 # Компилируемый	проект
-EXAMPLE		= DHT_Sensor
+EXAMPLE		= Delay
 
-include $(TOP_DIR)examples/${EXAMPLE}/Makefile
+include $(TOP_DIR)examples/${EXAMPLE}/Makefile.inc
 
 BINARY		=	main
 LDSCRIPT	?= $(TOP_DIR)/dep/gcc/MDR32F9Qx.ld
@@ -43,6 +43,11 @@ DEFS		+= -DUSE_MDR32F9Q2I -D__STARTUP_CLEAR_BSS -D__START=main
 FP_FLAGS	?= -msoft-float
 ARCH_FLAGS	= -mthumb -mcpu=cortex-m3 $(FP_FLAGS) -mfix-cortex-m3-ldrd
 ASFLAGS		= -mthumb -mcpu=cortex-m3
+
+# Добавить ресурсные файлы примера если они есть
+# ifdef EXAMPLES_SRCFILES
+# SRCFILES	+=	$(foreach n, $(EXAMPLES_SRCFILES), $(TOP_DIR)examples/$(EXAMPLE)/$(n) )
+# endif
 
 CC			:= $(PREFIX)-gcc
 CXX			:= $(PREFIX)-g++
