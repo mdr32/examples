@@ -9,7 +9,7 @@ HRD_PROBE		= ./dep/probe/jlink4swd.cfg	# JLlink hardware probe
 # Компилируемый	проект
 EXAMPLE		= DHT_Sensor
 
-include $(TOP_DIR)examples/${EXAMPLE}/Makefile
+include $(TOP_DIR)examples/${EXAMPLE}/Makefile.inc
 
 BINARY		=	main
 LDSCRIPT	?= $(TOP_DIR)/dep/gcc/MDR32F9Qx.ld
@@ -23,26 +23,33 @@ INC 		=	-I$(TOP_DIR)lib/Config \
 				-I$(TOP_DIR)lib/SPL/MDR32FxQI/inc/IRQ_Handler_Template \
 				-I$(TOP_DIR)lib/Debug \
 				-I$(TOP_DIR)lib/LOCM3/inc \
+				-I$(TOP_DIR)examples \
 				-I$(TOP_DIR)inc
 
-SRCFILES	=	$(foreach n, $(EXAMPLES_SRCFILES), $(TOP_DIR)examples/$(EXAMPLE)/$(n) ) \
-				$(TOP_DIR)examples/${EXAMPLE}/main.c \
-				$(TOP_DIR)src/delay.c \
+SRCFILES	=	$(TOP_DIR)examples/${EXAMPLE}/main.c \
 				$(TOP_DIR)dep/gcc/startup_MDR32F9Qx.S \
 				$(TOP_DIR)lib/CMSIS/MDR32FxQI/DeviceSupport/MDR32F9Q2I/startup/system_MDR32F9Q2I.c \
-				$(TOP_DIR)lib/SPL/MDR32FxQI/src/MDR32FxQI_rst_clk.c \
 				$(TOP_DIR)lib/Debug/rtt/SEGGER_RTT.c \
-				$(TOP_DIR)lib/Debug/rtt/SEGGER_RTT_printf.c \
-				$(TOP_DIR)lib/LOCM3/src/locm3_rcc.c \
-				$(TOP_DIR)lib/LOCM3/src/locm3_systick.c \
-				$(TOP_DIR)lib/LOCM3/src/locm3_gpio.c \
-				$(TOP_DIR)lib/LOCM3/src/locm3_timer.c
+				$(TOP_DIR)lib/Debug/rtt/SEGGER_RTT_printf.c
 
 PREFIX		?= arm-none-eabi
 DEFS		+= -DUSE_MDR32F9Q2I -D__STARTUP_CLEAR_BSS -D__START=main
 FP_FLAGS	?= -msoft-float
 ARCH_FLAGS	= -mthumb -mcpu=cortex-m3 $(FP_FLAGS) -mfix-cortex-m3-ldrd
 ASFLAGS		= -mthumb -mcpu=cortex-m3
+
+# Добавить ресурсные файлы примера если они есть
+ifdef EXAMPLES_SRCFILES
+SRCFILES	+=	$(foreach n, $(EXAMPLES_SRCFILES), $(TOP_DIR)examples/$(n) )
+endif
+
+ifdef EXAMPLES_LOCAL_SRCFILES
+SRCFILES	+=	$(foreach n, $(EXAMPLES_LOCAL_SRCFILES), $(TOP_DIR)examples/$(EXAMPLE)/$(n) )
+endif
+
+ifdef LIB_SRCFILES
+SRCFILES	+=	$(foreach n, $(LIB_SRCFILES), $(TOP_DIR)lib/$(n) )
+endif
 
 CC			:= $(PREFIX)-gcc
 CXX			:= $(PREFIX)-g++

@@ -3,6 +3,8 @@
 #include "MDR32FxQI_rst_clk.h"
 #include "locm3_gpio.h"
 
+#include "common/delay.h"
+
 #define LED_PORT GPIOC
 #define LED_PIN GPIO2
 #define MSLEEP 300 // ms
