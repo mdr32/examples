@@ -1,12 +1,9 @@
-#ifndef _DELAY_H
-#define _DELAY_H
+#ifndef _COMMON_DELAY_H
+#define _COMMON_DELAY_H
 
 #ifdef __cplusplus
  extern "C" {
 #endif
-
-#include "locm3_rcc.h"
-#include "locm3_systick.h"
 
 /**
  * Реализация задержки
