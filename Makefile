@@ -51,6 +51,13 @@ ifdef LIB_SRCFILES
 SRCFILES	+=	$(foreach n, $(LIB_SRCFILES), $(TOP_DIR)lib/$(n) )
 endif
 
+ifdef USE_RTOS
+include $(TOP_DIR)lib/RTOS/Makefile.inc
+INC 		+=	$(foreach n, $(RTOS_INC), -I$(TOP_DIR)lib/RTOS/$(n) )
+SRCFILES	+=	$(foreach n, $(RTOS_SRCFILES), $(TOP_DIR)lib/RTOS/$(n) )
+DEFS		+=	-DUSE_RTOS
+endif
+
 CC			:= $(PREFIX)-gcc
 CXX			:= $(PREFIX)-g++
 LD			:= $(PREFIX)-gcc
