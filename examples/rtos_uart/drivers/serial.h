@@ -19,7 +19,7 @@ xComPortHandle xSerialPortInit (uint32_t eWantedBaud, unsigned portBASE_TYPE uxQ
 signed portBASE_TYPE isSerialSendMessageEmpty (void);
 void xSerialAddMessageSend(const xSerialSendMessage_t * const cOutChar, TickType_t xBlockTime );
 signed portBASE_TYPE xSerialSendMessage (void);
-
+signed portBASE_TYPE xSerialGetChar(signed char *pcRxedChar, TickType_t xBlockTime );
 #ifdef __cplusplus
 }
 #endif

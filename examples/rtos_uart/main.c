@@ -23,7 +23,7 @@ int main(void)
     xSerialPortInit(57600, 3);
 
     xTaskCreate(vSend_Task, "Send", 50, NULL, tskIDLE_PRIORITY + 3, NULL);
-    // xTaskCreate(vRead_Task, "Read", 50, NULL, tskIDLE_PRIORITY + 2, NULL);
+    xTaskCreate(vRead_Task, "Read", 50, NULL, tskIDLE_PRIORITY + 2, NULL);
     // xTaskCreate(vCMD_Task, "CMD", 50, NULL, tskIDLE_PRIORITY + 1, NULL);
     // xTaskCreate(vPrint_Task, "Print", 50, NULL, tskIDLE_PRIORITY, NULL);
 
@@ -60,10 +60,11 @@ void vSend_Task(void *pvParameters)
 /** Чтение отввета на запрос */
 void vRead_Task(void *pvParameters)
 {
+    signed char cByteRxed;
     ( void ) pvParameters;
     for( ; ; )
     {
-        taskYIELD();
+        xSerialGetChar(&cByteRxed, ( TickType_t ) 0xFFFF);
     }
 }
 

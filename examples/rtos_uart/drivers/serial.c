@@ -10,6 +10,7 @@
 
 #define serINVALID_QUEUE    ( ( QueueHandle_t ) 0 )
 
+static QueueHandle_t xRxedChars;
 static QueueHandle_t xCharsForTx;
 
 xComPortHandle xSerialPortInit (uint32_t eWantedBaud, unsigned portBASE_TYPE uxQueueLength)
@@ -19,9 +20,10 @@ xComPortHandle xSerialPortInit (uint32_t eWantedBaud, unsigned portBASE_TYPE uxQ
     PORT_InitTypeDef PORT_InitStructure;
     UART_InitTypeDef UART_InitStructure;
 
+    xRxedChars = xQueueCreate( uxQueueLength, ( unsigned portBASE_TYPE ) sizeof( uint8_t ) );
     xCharsForTx = xQueueCreate( sizeof(xSerialSendMessage_t) + 1, ( unsigned portBASE_TYPE ) sizeof( uint8_t ));
 
-    if( xCharsForTx != serINVALID_QUEUE )
+    if( ( xRxedChars != serINVALID_QUEUE ) && ( xCharsForTx != serINVALID_QUEUE ) )
 	{
         RST_CLK_PCLKcmd(RST_CLK_PCLK_PORTF, ENABLE);
 
@@ -55,6 +57,9 @@ xComPortHandle xSerialPortInit (uint32_t eWantedBaud, unsigned portBASE_TYPE uxQ
 
         NVIC_SetPriority(UART2_IRQn, 7);
         NVIC_EnableIRQ(UART2_IRQn);
+
+        // UART_DMAConfig (MDR_UART2, UART_IT_FIFO_LVL_12words, UART_IT_FIFO_LVL_12words);
+        // UART_DMACmd(MDR_UART2, UART_DMA_RXE | UART_DMA_ONERR, ENABLE);
 
         UART_BRGInit(MDR_UART2, UART_HCLKdiv1);
         UART_ITConfig (MDR_UART2, UART_IT_RX, ENABLE);
@@ -112,6 +117,20 @@ signed portBASE_TYPE xSerialSendMessage (void)
     return xReturn;
 }
 
+signed portBASE_TYPE xSerialGetChar(signed char *pcRxedChar, TickType_t xBlockTime )
+{
+	/* Get the next character from the buffer.  Return false if no characters
+	are available, or arrive before xBlockTime expires. */
+	if( xQueueReceive( xRxedChars, pcRxedChar, xBlockTime ) )
+	{
+		return pdTRUE;
+	}
+	else
+	{
+		return pdFALSE;
+	}
+}
+
 void UART2_IRQHandler( void )
 {
     portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
@@ -128,6 +147,13 @@ void UART2_IRQHandler( void )
             UART_ITConfig (MDR_UART2, UART_IT_TX, DISABLE);
         }
     }
+
+    if( UART_GetITStatus( MDR_UART2, UART_IT_RX ) == SET )
+	{
+        UART_ClearITPendingBit(MDR_UART2, UART_IT_RX);
+		cChar = UART_ReceiveData( MDR_UART2 );
+		xQueueSendFromISR( xRxedChars, &cChar, &xHigherPriorityTaskWoken );
+	}
 
     portEND_SWITCHING_ISR( xHigherPriorityTaskWoken );
 }
