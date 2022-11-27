@@ -72,7 +72,7 @@ xComPortHandle xSerialPortInit (uint32_t eWantedBaud, unsigned portBASE_TYPE uxQ
     return xReturn;
 }
 
-/** Проверяет, выполняется ли сейчас какое либо действие с UART портом */
+/** Соводен ли UART порт для отправки сообщения */
 signed portBASE_TYPE isSerialSendMessageEmpty (void)
 {
     signed portBASE_TYPE xReturn = pdFALSE;
