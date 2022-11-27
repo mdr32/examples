@@ -34,18 +34,26 @@ int main(void)
     return 0;
 }
 
-/** Отправка сообщения на сервер */
+/** Отправка сообщения на сервер, единственный метод, взаимодействующий с UART-драйвером */
 void vSend_Task(void *pvParameters)
 {
     ( void ) pvParameters;
+    
+    // Эта очередь получаем из общего пула именно очередей
+    xSerialSendMessage_t msg;
+    msg.byte_A = 0xfa;
+    msg.byte_C = 0xfc;
+    msg.byte_B = 0xfb;
+    msg.byte_D = 0xfd;
+
     for( ; ; )
     {
-        xSerialAddMessageSend(0xfa, 0);
-        xSerialAddMessageSend(0xfb, 0);
-        xSerialAddMessageSend(0xfc, 0);
-        xSerialAddMessageSend(0xfd, 0);
-        xSerialSendMessage();
-        vTaskDelay(300);
+        if(isSerialSendMessageEmpty() == pdTRUE)
+        {
+            xSerialAddMessageSend(&msg, 0);
+            xSerialSendMessage();
+        }
+        vTaskDelay(600);
     }
 }
 

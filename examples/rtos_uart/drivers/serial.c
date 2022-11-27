@@ -19,7 +19,7 @@ xComPortHandle xSerialPortInit (uint32_t eWantedBaud, unsigned portBASE_TYPE uxQ
     PORT_InitTypeDef PORT_InitStructure;
     UART_InitTypeDef UART_InitStructure;
 
-    xCharsForTx = xQueueCreate( uxQueueLength + 1, ucSERIAL_MESSAGE_SIZE);
+    xCharsForTx = xQueueCreate( sizeof(xSerialSendMessage_t) + 1, ( unsigned portBASE_TYPE ) sizeof( uint8_t ));
 
     if( xCharsForTx != serINVALID_QUEUE )
 	{
@@ -67,22 +67,30 @@ xComPortHandle xSerialPortInit (uint32_t eWantedBaud, unsigned portBASE_TYPE uxQ
     return xReturn;
 }
 
-// Add to SEND BUFFER
-signed portBASE_TYPE xSerialAddMessageSend(signed char cOutChar, TickType_t xBlockTime )
+/** Проверяет, выполняется ли сейчас какое либо действие с UART портом */
+signed portBASE_TYPE isSerialSendMessageEmpty (void)
 {
-    signed portBASE_TYPE xReturn;
-    if( xQueueSend( xCharsForTx, &cOutChar, xBlockTime ) == pdPASS )
-	{
-		xReturn = pdPASS;
-	}
-	else
-	{
-		xReturn = pdFAIL;
-	}
-	return xReturn;
+    signed portBASE_TYPE xReturn = pdFALSE;
+    if( UART_GetFlagStatus (MDR_UART2, UART_FLAG_TXFE) == SET && !uxQueueMessagesWaiting(xCharsForTx) )
+    {
+        xReturn = pdTRUE;
+    }
+    return xReturn;
 }
 
-// Отправить накопленные данные из ояереди
+/** циклом добавляем структуру в буффер */
+void xSerialAddMessageSend(const xSerialSendMessage_t * const cOutChar, TickType_t xBlockTime )
+{
+    signed char *pxNext;
+    pxNext = ( signed char * ) cOutChar;
+	while( *pxNext )
+	{
+        xQueueSendToBack( xCharsForTx, pxNext, xBlockTime );
+		pxNext++;
+	}
+}
+
+/** Отправить накопленные данные из очереди */
 signed portBASE_TYPE xSerialSendMessage (void)
 {
     signed portBASE_TYPE xReturn;
