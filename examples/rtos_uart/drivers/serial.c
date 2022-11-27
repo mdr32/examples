@@ -13,15 +13,15 @@
 static QueueHandle_t xRxedChars;
 static QueueHandle_t xCharsForTx;
 
-xComPortHandle xSerialPortInit (uint32_t eWantedBaud, unsigned portBASE_TYPE uxQueueLength)
+xComPortHandle xSerialPortInit (uint32_t eWantedBaud, uint32_t uxTXQueueLength, uint32_t uxRXQueueLength)
 {
     xComPortHandle xReturn = MDR_UART2;
 
     PORT_InitTypeDef PORT_InitStructure;
     UART_InitTypeDef UART_InitStructure;
 
-    xRxedChars = xQueueCreate( uxQueueLength, ( unsigned portBASE_TYPE ) sizeof( uint8_t ) );
-    xCharsForTx = xQueueCreate( sizeof(xSerialSendMessage_t) + 1, ( unsigned portBASE_TYPE ) sizeof( uint8_t ));
+    xRxedChars = xQueueCreate( uxRXQueueLength, ( unsigned portBASE_TYPE ) sizeof( uint8_t ) );
+    xCharsForTx = xQueueCreate( uxTXQueueLength + 1, ( unsigned portBASE_TYPE ) sizeof( uint8_t ));
 
     if( ( xRxedChars != serINVALID_QUEUE ) && ( xCharsForTx != serINVALID_QUEUE ) )
 	{
@@ -84,7 +84,7 @@ signed portBASE_TYPE isSerialSendMessageEmpty (void)
 }
 
 /** циклом добавляем структуру в буффер */
-void xSerialAddMessageSend(const xSerialSendMessage_t * const cOutChar, TickType_t xBlockTime )
+void xSerialAddMessageSend(const uint8_t * const cOutChar, TickType_t xBlockTime )
 {
     signed char *pxNext;
     pxNext = ( signed char * ) cOutChar;

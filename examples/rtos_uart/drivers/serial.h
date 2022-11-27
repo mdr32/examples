@@ -7,17 +7,9 @@
 
 typedef void * xComPortHandle; // MDR_UART_TypeDef
 
-/** xSerialSendMessage_t Содержание сообщения */
-typedef struct {
-    uint8_t byte_A;
-    uint8_t byte_B;
-    uint8_t byte_C;
-    uint8_t byte_D;
-} xSerialSendMessage_t;
-
-xComPortHandle xSerialPortInit (uint32_t eWantedBaud, unsigned portBASE_TYPE uxQueueLength);
+xComPortHandle xSerialPortInit (uint32_t eWantedBaud, uint32_t uxTXQueueLength, uint32_t uxRXQueueLength);
 signed portBASE_TYPE isSerialSendMessageEmpty (void);
-void xSerialAddMessageSend(const xSerialSendMessage_t * const cOutChar, TickType_t xBlockTime );
+void xSerialAddMessageSend(const uint8_t * const cOutChar, TickType_t xBlockTime );
 signed portBASE_TYPE xSerialSendMessage (void);
 signed portBASE_TYPE xSerialGetChar(signed char *pcRxedChar, TickType_t xBlockTime );
 #ifdef __cplusplus
