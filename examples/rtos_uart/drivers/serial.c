@@ -137,7 +137,6 @@ void UART2_IRQHandler( void )
     char cChar;
     if( UART_GetITStatus( MDR_UART2, UART_IT_TX ) == SET )
     {
-        UART_ClearITPendingBit(MDR_UART2, UART_IT_TX);
         /** если есть еще сообщения, то продолжаем отправку*/
         if( xQueueReceiveFromISR( xCharsForTx, &cChar, 0 ) == pdTRUE )
         {
@@ -146,13 +145,14 @@ void UART2_IRQHandler( void )
         } else {
             UART_ITConfig (MDR_UART2, UART_IT_TX, DISABLE);
         }
+        UART_ClearITPendingBit(MDR_UART2, UART_IT_TX);
     }
 
     if( UART_GetITStatus( MDR_UART2, UART_IT_RX ) == SET )
 	{
-        UART_ClearITPendingBit(MDR_UART2, UART_IT_RX);
 		cChar = UART_ReceiveData( MDR_UART2 );
 		xQueueSendFromISR( xRxedChars, &cChar, &xHigherPriorityTaskWoken );
+        UART_ClearITPendingBit(MDR_UART2, UART_IT_RX);
 	}
 
     portEND_SWITCHING_ISR( xHigherPriorityTaskWoken );
