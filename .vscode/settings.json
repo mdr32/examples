@@ -1,6 +1,8 @@
 {
     "files.associations": {
+        "*.hex": "hexEditor.hexedit",
         "*.h": "c",
+        "system_error": "c"
     },
 
     "cortex-debug.armToolchainPath": "/usr/bin",

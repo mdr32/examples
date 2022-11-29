@@ -86,18 +86,18 @@ signed portBASE_TYPE isSerialSendMessageEmpty (void)
 /** циклом добавляем структуру в буффер */
 void xSerialAddMessageSend(const uint8_t * const cOutChar, TickType_t xBlockTime )
 {
-    for(uint32_t i = 0; i < sizeof(cOutChar); i++)
+    for(uint32_t i = 0; i < sizeof(&cOutChar); i++)
     {
         xQueueSendToBack( xCharsForTx, &cOutChar[i], xBlockTime );
     }
 }
 
 /** Отправить накопленные данные из очереди */
-signed portBASE_TYPE xSerialSendMessage (void)
+signed portBASE_TYPE xSerialSendMessage ( TickType_t xBlockTime )
 {
     signed portBASE_TYPE xReturn;
     uint8_t cChar;
-    if( xQueueReceive( xCharsForTx, &cChar, 0) == pdTRUE )
+    if( xQueueReceive( xCharsForTx, &cChar, xBlockTime) == pdTRUE )
     {
         /**
          * Поскольку прерывание при отправке будет выполнено
