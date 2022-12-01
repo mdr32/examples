@@ -1,3 +1,4 @@
+#include "MDR32F9Q2I_IT.h"
 #include "main.h"
 #include "common/core_clock.h"
 
