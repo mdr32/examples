@@ -1,10 +1,6 @@
 #include "MDR32FxQI_rst_clk.h"
 #include "MDR32FxQI_uart.h"
 #include "MDR32FxQI_port.h"
-#include "MDR32F9Q2I_IT.h"
-
-#include "FreeRTOS.h"
-#include "queue.h"
 
 #include "serial.h"
 
@@ -128,28 +124,28 @@ signed portBASE_TYPE xSerialGetChar(signed char *pcRxedChar, TickType_t xBlockTi
 	}
 }
 
-void UART2_IRQHandler( void )
+void vSerialInterruptHandler( xComPortHandle xPort )
 {
     portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
     char cChar;
-    if( UART_GetITStatus( MDR_UART2, UART_IT_TX ) == SET )
+    if( UART_GetITStatus( xPort, UART_IT_TX ) == SET )
     {
         /** если есть еще сообщения, то продолжаем отправку*/
         if( xQueueReceiveFromISR( xCharsForTx, &cChar, 0 ) == pdTRUE )
         {
-            UART_ITConfig (MDR_UART2, UART_IT_TX, ENABLE);
-            UART_SendData(MDR_UART2, cChar);
+            UART_ITConfig (xPort, UART_IT_TX, ENABLE);
+            UART_SendData(xPort, cChar);
         } else {
-            UART_ITConfig (MDR_UART2, UART_IT_TX, DISABLE);
+            UART_ITConfig (xPort, UART_IT_TX, DISABLE);
         }
-        UART_ClearITPendingBit(MDR_UART2, UART_IT_TX);
+        UART_ClearITPendingBit(xPort, UART_IT_TX);
     }
 
-    if( UART_GetITStatus( MDR_UART2, UART_IT_RX ) == SET )
+    if( UART_GetITStatus( xPort, UART_IT_RX ) == SET )
 	{
-		cChar = UART_ReceiveData( MDR_UART2 );
+		cChar = UART_ReceiveData( xPort );
 		xQueueSendFromISR( xRxedChars, &cChar, &xHigherPriorityTaskWoken );
-        UART_ClearITPendingBit(MDR_UART2, UART_IT_RX);
+        UART_ClearITPendingBit(xPort, UART_IT_RX);
 	}
 
     portEND_SWITCHING_ISR( xHigherPriorityTaskWoken );
