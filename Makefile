@@ -7,7 +7,7 @@ HRD_PROBE		= ./dep/probe/jlink4swd.cfg	# JLlink hardware probe
 
 ######
 # Компилируемый	проект
-EXAMPLE		= Blinky
+EXAMPLE		= rtos_uart
 
 include $(TOP_DIR)examples/${EXAMPLE}/Makefile.inc
 
@@ -24,7 +24,8 @@ INC 		=	-I$(TOP_DIR)lib/Config \
 				-I$(TOP_DIR)lib/Debug \
 				-I$(TOP_DIR)lib/LOCM3/inc \
 				-I$(TOP_DIR)examples \
-				-I$(TOP_DIR)inc
+				-I$(TOP_DIR)inc \
+				-I$(TOP_DIR)examples/${EXAMPLE}
 
 SRCFILES	=	$(TOP_DIR)examples/${EXAMPLE}/main.c \
 				$(TOP_DIR)dep/gcc/startup_MDR32F9Qx.S \
@@ -49,6 +50,13 @@ endif
 
 ifdef LIB_SRCFILES
 SRCFILES	+=	$(foreach n, $(LIB_SRCFILES), $(TOP_DIR)lib/$(n) )
+endif
+
+ifdef USE_RTOS
+include $(TOP_DIR)lib/RTOS/Makefile.inc
+INC 		+=	$(foreach n, $(RTOS_INC), -I$(TOP_DIR)lib/RTOS/$(n) )
+SRCFILES	+=	$(foreach n, $(RTOS_SRCFILES), $(TOP_DIR)lib/RTOS/$(n) )
+DEFS		+=	-DUSE_RTOS
 endif
 
 CC			:= $(PREFIX)-gcc
