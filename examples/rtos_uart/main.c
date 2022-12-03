@@ -153,12 +153,13 @@ void vCMD_Task(void *pvParameters)
     }
 }
 
-/** Логирование сообщения */
+/** Логирование сообщения, метод пуст и используется только
+ * для демонстрации в контексте понимания приоритетов */
 void vPrint_Task(void *pvParameters)
 {
     ( void ) pvParameters;
     for( ; ; )
     {
-        taskYIELD();
+        vTaskDelay(300);
     }
 }
