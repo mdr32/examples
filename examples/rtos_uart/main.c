@@ -74,7 +74,7 @@ void vSend_Task(void *pvParameters)
     }
 }
 
-/** Опрос кнопки, в случае нажатия, на событие DOWN будет отправлено сообщение */
+/** Опрос кнопки, в случае нажатия будет отправлено сообщение */
 void vBtn_Task(void *pvParameters)
 {
     ( void ) pvParameters;
