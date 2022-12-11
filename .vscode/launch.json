@@ -12,6 +12,7 @@
             "type": "cortex-debug",
             "servertype": "openocd",
             "serverpath": "/usr/local/bin/openocd",
+            "rtos": "FreeRTOS",
             "device": "MDR32F9Qx",
             "svdFile": "${workspaceRoot}/dep/mcu/MDR1986BE92.svd",
             "configFiles": [

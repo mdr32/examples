@@ -37,6 +37,11 @@
 #define configUSE_MALLOC_FAILED_HOOK          0
 #define configUSE_16_BIT_TICKS                0
 
+///// BY DEBUG MODE OPTIONS
+#define configUSE_TRACE_FACILITY              1
+#define configRECORD_STACK_HIGH_ADDRESS       1
+/////
+
 /* Set the following definitions to 1 to include the API function, or zero
 to exclude the API function. */
 #define INCLUDE_vTaskPrioritySet              1
