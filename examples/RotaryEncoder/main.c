@@ -6,9 +6,10 @@
 #include "MDR32FxQI_port.h"
 #include "MDR32FxQI_timer.h"
 
-/**
- * Использует порт A пины 1 и 2
- */
+/** Таймер определяется только на одном порту таймера */
+#define PORT_ECODER     MDR_PORTA
+#define PIN_ECODER_A    PORT_Pin_1  // Альтернативный с функциями таймер
+#define PIN_ECODER_B    PORT_Pin_2  // Обычный пин, только для чтения
 
 int main(void)
 {
@@ -30,8 +31,8 @@ void init_port_encoder(void)
     PORT_InitTypeDef PORT_InitStructure;
     RST_CLK_PCLKcmd(RST_CLK_PCLK_PORTA, ENABLE);
     PORT_StructInit(&PORT_InitStructure);
-    // PA! - 
-    PORT_InitStructure.PORT_Pin   = PORT_Pin_1;
+    // PIN_ECODER_A
+    PORT_InitStructure.PORT_Pin   = PIN_ECODER_A;
     PORT_InitStructure.PORT_OE    = PORT_OE_IN;
     PORT_InitStructure.PORT_PULL_UP = PORT_PULL_UP_OFF;
     PORT_InitStructure.PORT_PULL_DOWN = PORT_PULL_DOWN_ON;
@@ -40,15 +41,16 @@ void init_port_encoder(void)
     PORT_InitStructure.PORT_FUNC = PORT_FUNC_ALTER;
     PORT_InitStructure.PORT_SPEED = PORT_OUTPUT_OFF;
     PORT_InitStructure.PORT_MODE = PORT_MODE_DIGITAL;
-    PORT_Init(MDR_PORTA, &PORT_InitStructure);
-    // 
-    PORT_InitStructure.PORT_Pin   = PORT_Pin_2;
-    PORT_Init(MDR_PORTA, &PORT_InitStructure);
+    PORT_Init(PORT_ECODER, &PORT_InitStructure);
+    // PIN_ECODER_B
+    PORT_InitStructure.PORT_Pin     = PIN_ECODER_B;
+    PORT_InitStructure.PORT_FUNC    = PORT_FUNC_PORT;
+    PORT_Init(PORT_ECODER, &PORT_InitStructure);
 }
 
 void init_timer_encoder(void)
 {
-
+    
 }
 
 void CaptureIRQCallback (void)
