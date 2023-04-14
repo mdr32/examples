@@ -48,7 +48,6 @@ void init_port_encoder(void)
     PORT_Init(PORT_ECODER, &PORT_InitStructure);
 }
 
-// /
 void init_timer_encoder(void)
 {
     
