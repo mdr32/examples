@@ -1,13 +1,13 @@
-RTOS_INC		=	FreeRTOS/FreeRTOS/Source/include \
-					FreeRTOS/FreeRTOS/Source/portable/GCC/ARM_CM3
+RTOS_INC		=	FreeRTOS-Kernel/include \
+					FreeRTOS-Kernel/portable/GCC/ARM_CM3
 
 
-RTOS_SRCFILES	=	FreeRTOS/FreeRTOS/Source/croutine.c \
-					FreeRTOS/FreeRTOS/Source/event_groups.c \
-					FreeRTOS/FreeRTOS/Source/list.c \
-					FreeRTOS/FreeRTOS/Source/queue.c \
-					FreeRTOS/FreeRTOS/Source/stream_buffer.c \
-					FreeRTOS/FreeRTOS/Source/tasks.c \
-					FreeRTOS/FreeRTOS/Source/timers.c \
-					FreeRTOS/FreeRTOS/Source/portable/MemMang/heap_4.c \
-					FreeRTOS/FreeRTOS/Source/portable/GCC/ARM_CM3/port.c
+RTOS_SRCFILES	=	FreeRTOS-Kernel/croutine.c \
+					FreeRTOS-Kernel/event_groups.c \
+					FreeRTOS-Kernel/list.c \
+					FreeRTOS-Kernel/queue.c \
+					FreeRTOS-Kernel/stream_buffer.c \
+					FreeRTOS-Kernel/tasks.c \
+					FreeRTOS-Kernel/timers.c \
+					FreeRTOS-Kernel/portable/MemMang/heap_4.c \
+					FreeRTOS-Kernel/portable/GCC/ARM_CM3/port.c
