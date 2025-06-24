@@ -1,0 +1,3 @@
+[submodule "examples/MDR1211_lcd1602_i2c"]
+	path = examples/MDR1211_lcd1602_i2c
+	url = https://github.com/arty1223/MDR1211_lcd1602_i2c.git
